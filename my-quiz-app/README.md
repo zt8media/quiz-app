@@ -1,8 +1,11 @@
-# React + Vite
+# Quiz App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is a quiz application built with React, Vite, and styled-components. It includes pages for quiz generation, a quiz page, results, home, and account management. The project uses Materialize CSS for styling the navigation bar and footer, enhanced with styled-components for custom styling and responsiveness.
 
-Currently, two official plugins are available:
+## Clone the Repository
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+To get started, clone the repository:
+
+```bash
+git clone https://github.com/zt8media/quiz-app.git
+cd quiz-app
