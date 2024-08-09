@@ -1,6 +1,7 @@
 // src/pages/Account.jsx
 import React from 'react';
 import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
 
 function Account() {
   return (
@@ -10,6 +11,7 @@ function Account() {
         <h1>Account Page</h1>
         <p>Manage your account details here.</p>
       </div>
+      <Footer />
     </>
   );
 }
