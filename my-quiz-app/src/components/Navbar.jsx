@@ -80,7 +80,7 @@ const Navbar = () => {
 
   return (
     <StyledNavbar className="nav-wrapper">
-      <a href="/" className="brand-logo">Home</a>
+      <a href="/" className="brand-logo">lrnr</a>
       <a
         href="#!"
         onClick={handleMenuClick}

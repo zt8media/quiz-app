@@ -9,7 +9,9 @@ function Quiz() {
       <Navbar />
       <div>
         <h1>Quiz Page</h1>
-        <p>Here you can take the quiz!</p>
+        <p>Users should be presented with one question at a time and be able to select an answer.
+Users should be able to submit their answers 
+</p>
       </div>
       <Footer />
     </>

@@ -9,7 +9,8 @@ function Home() {
       <Navbar />
       <div>
         <h1>Home Page</h1>
-        <p>Welcome to the Quiz App!</p>
+        <p>Should be a static recreation of the current Home Page
+</p>
       </div>
       <Footer />
     </>

@@ -9,7 +9,9 @@ function Account() {
       <Navbar />
       <div>
         <h1>Account Page</h1>
-        <p>Manage your account details here.</p>
+        <p>Should be a static recreation of the current Account Page
+You do not need to track any quiz stats or account information
+</p>
       </div>
       <Footer />
     </>
