@@ -1,39 +1,81 @@
-// src/components/Footer.jsx
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
-const StyledFooter = styled.footer`
-  background-color: #2196F3; /* Blue color */
+const FooterContainer = styled.footer`
+  background-color: #1e90ff;
   color: white;
-  position: fixed;
-  bottom: 0;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  position: relative;
   width: 100%;
-  padding: 1rem;
-  text-align: center;
 
-  @media (max-width: 600px) {
-    font-size: 0.9rem;
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+`;
+
+const LinksContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-right: 15%;
+
+  @media (max-width: 768px) {
+    align-items: center;
+    margin-top: 20px;
+    margin-right: 0; /* Centering the links */
+  }
+`;
+
+const FooterTitle = styled.h3`
+  margin-bottom: 10px;
+`;
+
+const FooterLink = styled(Link)`
+  color: white;
+  text-decoration: none;
+  margin: 5px 0;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const ParagraphContainer = styled.div`
+  max-width: 50%; /* Increased width to avoid jumbled text */
+  margin-left: 5%;
+  font-size: 1.3em;
+
+  @media (max-width: 768px) {
+    max-width: 80%; /* Further increased width for mobile */
+    margin-left: 0; /* Centering the paragraph */
   }
 `;
 
 const Footer = () => {
   return (
-    <StyledFooter>
-      <div className="container">
-        <h5>Quiz App</h5>
-        <p>Thank you for using our quiz app. We hope you enjoyed it!</p>
-        <div>
-          <a href="/" className="white-text">Home</a> | 
-          <a href="/quiz" className="white-text"> Quiz</a> | 
-          <a href="/results" className="white-text"> Results</a> | 
-          <a href="/account" className="white-text"> Account</a> | 
-          <a href="/generate" className="white-text"> Generate Quiz</a>
-        </div>
-        <div className="footer-copyright">
-          © 2024 Quiz App
-        </div>
-      </div>
-    </StyledFooter>
+    <FooterContainer>
+      <ParagraphContainer>
+        <p>
+          Embrace the power of our app and unlock the secrets of the universe,
+          one quiz at a time. As I always say, "Yesterday is history, tomorrow
+          is a mystery, but today is a gift. That is why it is called the
+          present."
+        </p>
+      </ParagraphContainer>
+      <LinksContainer>
+        <FooterTitle>Links</FooterTitle>
+        <FooterLink to="/">Home</FooterLink>
+        <FooterLink to="/account">Account</FooterLink>
+        <FooterLink to="/quiz-generator">Quiz Generator</FooterLink>
+      </LinksContainer>
+    </FooterContainer>
   );
 };
 

@@ -5,12 +5,12 @@ import Quiz from './pages/Quiz';
 import Results from './pages/Results';
 import Account from './pages/Account';
 import Generate from './pages/Generate';
-import Navbar from './components/Navbar';
+import Layout from './components/Layout';
 
 function App() {
   return (
     <Router>
-      
+      <Layout>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/quiz" element={<Quiz />} />
@@ -18,6 +18,7 @@ function App() {
         <Route path="/account" element={<Account />} />
         <Route path="/generate" element={<Generate />} />
       </Routes>
+      </Layout>
     </Router>
   );
 }
