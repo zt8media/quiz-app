@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Home from './pages/Home';
-import Quiz from './pages/Quiz';
-import Results from './pages/Results';
-import Account from './pages/Account';
-import Generate from './pages/Generate';
+import Home from './Pages/Home';
+import Quiz from './Pages/Quiz';
+import Results from './Pages/Results';
+import Account from './Pages/Account';
+import Generate from './Pages/Generate';
 import Layout from './components/Layout';
 
 function App() {
