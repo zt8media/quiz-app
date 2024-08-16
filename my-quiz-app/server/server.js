@@ -1,24 +1,22 @@
 const express = require('express');
 const path = require('path');
+const cors = require('cors');
+const axios = require('axios');  // Ensure axios is required
 require('dotenv').config({ path: '../.env' }); // Load environment variables from .env file
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON request bodies
+app.use(cors()); // Enable CORS for all routes
 
 const port = process.env.PORT || 8080; // Use the port from environment variables or default to 8080
 const claudeAPIKey = process.env.CLAUDE_API_KEY; // Claude API key from environment variables
 const claudeBaseURL = 'https://api.anthropic.com/v1/messages'; // Correct base URL for Claude API
-
-// Handle CORS for cross-origin requests
-const cors = require('cors');
-app.use(cors()); // Enable CORS for all routes
 
 // Default route for root path
 app.get('/', (req, res) => {
   res.send('Welcome to the Quiz API'); // Simple response for the root URL
 });
 
-// Quiz topics
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../dist')));  // Adjust if needed
 
@@ -35,13 +33,11 @@ app.get('/api/topics', (req, res) => {
   ]);
 });
 
-// Quiz questions generation route
 app.post('/api/generate-quiz', async (req, res) => {
   const { topic, expertise, numberOfQuestions, style } = req.body; // Extract options from the request body
 
   // Construct the prompt based on the selected options
-  const prompt = `Generate ${numberOfQuestions} quiz questions on the topic of ${topic} for a ${expertise} level audience. The questions should be styled in the manner of ${style}. 
-   Just go straight to the questions no other response. Do not give me multiple choices just 5 questions.`;
+  const prompt = `Generate ${numberOfQuestions} quiz questions on the topic of ${topic} for a ${expertise} level audience. The questions should be styled in the manner of ${style}. Just go straight to the questions no other response. Do not give me multiple choices just 5 questions.`;
 
   try {
     console.log('Sending request to Claude API with prompt:', prompt);
@@ -90,69 +86,51 @@ app.post('/api/generate-quiz', async (req, res) => {
   }
 });
 
-// Route to submit answers (placeholder)
-app.post('/api/submit-answers', (req, res) => {
-  // Placeholder logic for answer submission
-  res.json({ success: true, message: 'Answers submitted successfully' });
-});
-
 app.post('/api/verify-answer', async (req, res) => {
-    const { question, userAnswer, correctAnswer } = req.body;
-  
-    // Construct a clear prompt for Claude API to compare the answers
-    const prompt = `The question is: "${question}". The user's answer is: "${userAnswer}". The correct answer is: "${correctAnswer}". Compare the user's answer to the correct answer. Is the user's answer correct? Reply with "Correct" or "Incorrect".
-    As long as the users answer is partially correct, respond with "Correct". It does not have to be the full technical description or a complete explanation.`;
-  
-    try {
-      console.log('Sending verification request to Claude API with prompt:', prompt);
-  
-      const response = await axios({
-        method: 'post',
-        url: claudeBaseURL,  
-        headers: {
-          'x-api-key': claudeAPIKey,
-          'Content-Type': 'application/json',
-          'anthropic-version': '2023-06-01',
-        },
-        data: {
-          model: 'claude-3-5-sonnet-20240620',
-          max_tokens: 100,
-          messages: [
-            { role: 'user', content: prompt }
-          ]
-        }
-      });
-  
-      console.log('Received response from Claude API:', response.data);
-  
-      // Extract the response and check if it's "Correct" or "Incorrect"
-      const answerVerification = response.data.content[0].text.trim().toLowerCase();
-      const isCorrect = answerVerification === 'correct';
-      
-      res.json({ correct: isCorrect });
-    } catch (error) {
-      console.error('Error verifying answer:', error);
-      res.status(500).send('Failed to verify answer');
-    }
-  });
-  
+  const { question, userAnswer, correctAnswer } = req.body;
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
-});
+  // Construct a clear prompt for Claude API to compare the answers
+  const prompt = `The question is: "${question}". The user's answer is: "${userAnswer}". The correct answer is: "${correctAnswer}". Compare the user's answer to the correct answer. Is the user's answer correct? Reply with "Correct" or "Incorrect". As long as the user's answer is partially correct, respond with "Correct". It does not have to be the full technical description or a complete explanation.`;
 
-app.post('/api/submit-answers', (req, res) => {
-    res.json({ success: true, message: 'Answers submitted successfully' });
+  try {
+    console.log('Sending verification request to Claude API with prompt:', prompt);
+
+    const response = await axios({
+      method: 'post',
+      url: claudeBaseURL,
+      headers: {
+        'x-api-key': claudeAPIKey,
+        'Content-Type': 'application/json',
+        'anthropic-version': '2023-06-01',
+      },
+      data: {
+        model: 'claude-3-5-sonnet-20240620',
+        max_tokens: 100,
+        messages: [
+          { role: 'user', content: prompt }
+        ]
+      }
+    });
+
+    console.log('Received response from Claude API:', response.data);
+
+    // Extract the response and check if it's "Correct" or "Incorrect"
+    const answerVerification = response.data.content[0].text.trim().toLowerCase();
+    const isCorrect = answerVerification === 'correct';
+
+    res.json({ correct: isCorrect });
+  } catch (error) {
+    console.error('Error verifying answer:', error);
+    res.status(500).send('Failed to verify answer');
+  }
 });
 
 // Catch-all handler for any requests not handled by API routes
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../dist/index.html'));  // Adjust if needed
+  res.sendFile(path.join(__dirname, '../dist/index.html'));  
 });
 
-const port = process.env.PORT || 8080;
+// Start the server
 app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on http://localhost:${port}`);
 });
