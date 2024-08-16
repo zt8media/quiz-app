@@ -17,8 +17,8 @@ app.get('/', (req, res) => {
   res.send('Welcome to the Quiz API'); // Simple response for the root URL
 });
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../dist')));  // Adjust if needed
+// // Serve static files from the React app
+// app.use(express.static(path.join(__dirname, '../dist')));  // Adjust if needed
 
 // API routes
 app.get('/api/topics', (req, res) => {
