@@ -1,5 +1,5 @@
 const express = require('express');
-const axios = require('axios');
+const path = require('path');
 require('dotenv').config({ path: '../.env' }); // Load environment variables from .env file
 
 const app = express();
@@ -19,6 +19,10 @@ app.get('/', (req, res) => {
 });
 
 // Quiz topics
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../dist')));  // Adjust if needed
+
+// API routes
 app.get('/api/topics', (req, res) => {
   res.json([
     'golang',
@@ -136,4 +140,19 @@ app.post('/api/verify-answer', async (req, res) => {
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
+});
+});
+
+app.post('/api/submit-answers', (req, res) => {
+    res.json({ success: true, message: 'Answers submitted successfully' });
+});
+
+// Catch-all handler for any requests not handled by API routes
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../dist/index.html'));  // Adjust if needed
+});
+
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
 });
