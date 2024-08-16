@@ -9,6 +9,8 @@ const port = process.env.PORT || 8080;
 const claudeAPIKey = process.env.CLAUDE_API_KEY;
 const claudeBaseURL = 'https://api.claude.ai/v1';
 
+// Middleware for serving static files from React build
+app.use(express.static(path.join(__dirname, '../dist')));
 
 // quiz topics
 app.get('/api/topics', (req, res) => {
@@ -63,6 +65,11 @@ app.get('/api/topics', (req, res) => {
     res.json({ success: true, message: 'Answers submitted successfully' });
   });
   
-  app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+/// Serve React's index.html for any non-API routes
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../dist', 'index.html'));
+});
+
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
   });
