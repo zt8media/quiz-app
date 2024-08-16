@@ -13,12 +13,12 @@ const claudeAPIKey = process.env.CLAUDE_API_KEY; // Claude API key from environm
 const claudeBaseURL = 'https://api.anthropic.com/v1/messages'; // Correct base URL for Claude API
 
 // Default route for root path
-app.get('/', (req, res) => {
-  res.send('Welcome to the Quiz API'); // Simple response for the root URL
-});
+// app.get('/', (req, res) => {
+//   res.send('Welcome to the Quiz API'); // Simple response for the root URL
+// });
 
-// // Serve static files from the React app
-// app.use(express.static(path.join(__dirname, '../dist')));  // Adjust if needed
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../dist')));  // Adjust if needed
 
 // API routes
 app.get('/api/topics', (req, res) => {
