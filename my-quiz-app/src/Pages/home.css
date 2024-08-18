@@ -15,7 +15,7 @@
     margin-bottom: 5rem;
     background-color: #268f73;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
-    color: white;
+    color: aliceblue;
     padding: 10px 20px;
     font-size: 1rem;
     border: none;
@@ -24,12 +24,14 @@
     
   }
 
+
+
   .info h3{
     text-align: center;
   }
   
-  .start-button:hover {
-    background-color: #38483b;
+  .jrny-button:hover {
+    background-color: #7cd1b7;
   }
   
   .info-container {
