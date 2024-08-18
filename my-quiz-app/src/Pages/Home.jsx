@@ -2,6 +2,7 @@
 import React from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
+import { Link } from 'react-router-dom';
 import './home.css';
 
 function Home() {
@@ -13,13 +14,15 @@ function Home() {
         <div className="logo-section">
           <img src="lrnr.png" alt="Logo" className="logo" />
           <h3>Your guided path to programming enlightenment</h3>
+          <Link to='/generate'>
           <button className="jrny-button">Begin Journey</button>
+          </Link>
         </div>
 
         <div className="info-container">
 
           <div className="info">
-          <span class="material-icons">flash_on</span>
+          <span className="material-icons">flash_on</span>
             <h3>Personalized Quizzes</h3>
             <p>
               Greetings, young padawan. Are you ready to embark on a journey of personalized enlightenment through the art of coding? Our app can create custom quizzes that align with your coding skills and interests. Whether you are a novice or a master, our system can generate questions that will test your proficiency in programming languages, tools, and concepts.
@@ -28,7 +31,7 @@ function Home() {
 
 
           <div className="info">
-          <span class="material-icons">
+          <span className="material-icons">
 payments
 </span>
             <h3>Rewarding</h3>
@@ -38,7 +41,7 @@ payments
           </div>
 
           <div className="info">
-          <span class="material-icons">
+          <span className="material-icons">
 person
 </span>
             <h3>Personal SME</h3>
