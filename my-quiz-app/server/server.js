@@ -1,8 +1,6 @@
 const express = require('express');
-const path = require('path');
-const cors = require('cors');
-const axios = require('axios');  // Ensure axios is required
-require('dotenv').config({ path: '../.env' }); // Load environment variables from .env file
+const axios = require('axios');
+require('dotenv').config({ path: '../.env' }); 
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON request bodies
@@ -12,10 +10,16 @@ const port = process.env.PORT || 8080; // Use the port from environment variable
 const claudeAPIKey = process.env.CLAUDE_API_KEY; // Claude API key from environment variables
 const claudeBaseURL = 'https://api.anthropic.com/v1/messages'; // Correct base URL for Claude API
 
-// Serve static files from the React app
-app.use(express.static(path.join(__dirname, '../dist')));  // Adjust if needed
+// Handle CORS for cross-origin requests
+const cors = require('cors');
+app.use(cors()); 
 
-// API routes
+// Default route for root path
+app.get('/', (req, res) => {
+  res.send('Welcome to the Quiz API');
+});
+
+// Quiz topics
 app.get('/api/topics', (req, res) => {
   res.json([
     'golang',
@@ -32,7 +36,8 @@ app.post('/api/generate-quiz', async (req, res) => {
   const { topic, expertise, numberOfQuestions, style } = req.body; // Extract options from the request body
 
   // Construct the prompt based on the selected options
-  const prompt = `Generate ${numberOfQuestions} quiz questions on the topic of ${topic} for a ${expertise} level audience. The questions should be styled in the manner of ${style}. Just go straight to the questions no other response. Do not give me multiple choices just 5 questions.`;
+  const prompt = `Generate ${numberOfQuestions} quiz questions on the topic of ${topic} for a ${expertise} level audience. The questions should be styled in the manner of ${style}. 
+   Just go straight to the questions, no other response. Do not give me multiple choices, just 5 questions.`;
 
   try {
     console.log('Sending request to Claude API with prompt:', prompt);
@@ -81,11 +86,19 @@ app.post('/api/generate-quiz', async (req, res) => {
   }
 });
 
+// Route to submit answers (placeholder)
+app.post('/api/submit-answers', (req, res) => {
+  // Placeholder logic for answer submission
+  res.json({ success: true, message: 'Answers submitted successfully' });
+});
+
+// Verification route for checking the user's answer
 app.post('/api/verify-answer', async (req, res) => {
   const { question, userAnswer, correctAnswer } = req.body;
 
   // Construct a clear prompt for Claude API to compare the answers
-  const prompt = `The question is: "${question}". The user's answer is: "${userAnswer}". The correct answer is: "${correctAnswer}". Compare the user's answer to the correct answer. Is the user's answer correct? Reply with "Correct" or "Incorrect". As long as the user's answer is partially correct, respond with "Correct". It does not have to be the full technical description or a complete explanation.`;
+  const prompt = `The question is: "${question}". The user's answer is: "${userAnswer}". The correct answer is: "${correctAnswer}". Compare the user's answer to the correct answer. Is the user's answer correct? Reply with "Correct" or "Incorrect".
+  As long as the user's answer is partially correct, respond with "Correct". It does not have to be the full technical description or a complete explanation.`;
 
   try {
     console.log('Sending verification request to Claude API with prompt:', prompt);
@@ -94,17 +107,17 @@ app.post('/api/verify-answer', async (req, res) => {
       method: 'post',
       url: claudeBaseURL,
       headers: {
-        'x-api-key': claudeAPIKey,
+        'x-api-key': claudeAPIKey, // Use the API key from environment variables
         'Content-Type': 'application/json',
-        'anthropic-version': '2023-06-01',
+        'anthropic-version': '2023-06-01', // Set the correct API version
       },
       data: {
-        model: 'claude-3-5-sonnet-20240620',
-        max_tokens: 100,
+        model: 'claude-3-5-sonnet-20240620', // Specify the correct model
+        max_tokens: 100, // Adjust max tokens as needed
         messages: [
-          { role: 'user', content: prompt }
-        ]
-      }
+          { role: 'user', content: prompt },
+        ],
+      },
     });
 
     console.log('Received response from Claude API:', response.data);
@@ -118,11 +131,6 @@ app.post('/api/verify-answer', async (req, res) => {
     console.error('Error verifying answer:', error);
     res.status(500).send('Failed to verify answer');
   }
-});
-
-// Catch-all handler for any requests not handled by API routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, '../dist/index.html'));  
 });
 
 // Start the server
