@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080';
-
 function Generate() {
   const [topic, setTopic] = useState('golang'); // Defaulting quiz answer choices
   const [expertise, setExpertise] = useState('novice'); 
