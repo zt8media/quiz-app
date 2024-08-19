@@ -1,6 +1,6 @@
 const express = require('express');
 const axios = require('axios');
-require('dotenv').config({ path: '../.env' }); 
+require('dotenv').config(); // Load environment variables from .env file
 const path = require('path');
 
 const app = express();
@@ -13,10 +13,13 @@ const claudeBaseURL = 'https://api.anthropic.com/v1/messages'; // Correct base U
 // Handle CORS for cross-origin requests
 const cors = require('cors');
 app.use(cors({
-  origin: 'https://quiz-app-0ql9.onrender.com', 
+  origin: process.env.FRONTEND_URL || '*', // Allow requests from your front-end domain or any origin in dev
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
+
+// Serve static files from the React app (after the build step)
+app.use(express.static(path.join(__dirname, 'build')));
 
 // Default route for root path
 app.get('/', (req, res) => {
@@ -91,12 +94,6 @@ app.post('/api/generate-quiz', async (req, res) => {
   }
 });
 
-// Route to submit answers (placeholder)
-app.post('/api/submit-answers', (req, res) => {
-  // Placeholder logic for answer submission
-  res.json({ success: true, message: 'Answers submitted successfully' });
-});
-
 // Verification route for checking the user's answer
 app.post('/api/verify-answer', async (req, res) => {
   const { question, userAnswer, correctAnswer } = req.body;
@@ -138,16 +135,12 @@ app.post('/api/verify-answer', async (req, res) => {
   }
 });
 
-// Serve static files from the React app (after the build step)
-app.use(express.static(path.join(__dirname, 'build')));
-
-// Handle React routing, return all requests to the front-end app
+// Fallback to serve React front-end for unknown routes
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-
 // Start the server
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server is running on port ${port}`);
 });
