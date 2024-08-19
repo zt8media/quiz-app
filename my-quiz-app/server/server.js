@@ -7,7 +7,7 @@ require('dotenv').config({ path: path.join(__dirname, '../.env') });
 const app = express();
 app.use(express.json());
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'https://quiz-app-0ql9.onrender.com', 
+  origin: process.env.REACT_APP_API_BASE_URL || '*', 
   methods: ['GET', 'POST'],
   allowedHeaders: ['Content-Type', 'Authorization'],
 }));
