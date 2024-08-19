@@ -1,6 +1,5 @@
 const express = require('express');
 const path = require('path');
-const cors = require('cors');
 const axios = require('axios');  // Ensure axios is required
 require('dotenv').config({ path: '../.env' }); // Load environment variables from .env file
 
@@ -15,7 +14,15 @@ const claudeBaseURL = 'https://api.anthropic.com/v1/messages'; // Correct base U
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../dist')));  // Adjust if needed
 
+// Handle CORS for cross-origin requests
+const cors = require('cors');
+app.use(cors({
+  origin: 'https://quiz-app-0ql9.onrender.com', 
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 // API routes
+
 app.get('/api/topics', (req, res) => {
   res.json([
     'golang',
