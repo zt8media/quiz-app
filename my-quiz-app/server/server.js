@@ -12,11 +12,6 @@ const port = process.env.PORT || 8080; // Use the port from environment variable
 const claudeAPIKey = process.env.CLAUDE_API_KEY; // Claude API key from environment variables
 const claudeBaseURL = 'https://api.anthropic.com/v1/messages'; // Correct base URL for Claude API
 
-// Default route for root path
-// app.get('/', (req, res) => {
-//   res.send('Welcome to the Quiz API'); // Simple response for the root URL
-// });
-
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, '../dist')));  // Adjust if needed
 
