@@ -12,7 +12,11 @@ const claudeBaseURL = 'https://api.anthropic.com/v1/messages'; // Correct base U
 
 // Handle CORS for cross-origin requests
 const cors = require('cors');
-app.use(cors()); 
+app.use(cors({
+  origin: 'https://quiz-app-0ql9.onrender.com', 
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 // Default route for root path
 app.get('/', (req, res) => {
