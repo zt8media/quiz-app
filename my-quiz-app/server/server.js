@@ -4,7 +4,6 @@ require('dotenv').config({ path: '../.env' });
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON request bodies
-app.use(cors()); // Enable CORS for all routes
 
 const port = process.env.PORT || 8080; // Use the port from environment variables or default to 8080
 const claudeAPIKey = process.env.CLAUDE_API_KEY; // Claude API key from environment variables
@@ -32,6 +31,7 @@ app.get('/api/topics', (req, res) => {
   ]);
 });
 
+// Quiz questions generation route
 app.post('/api/generate-quiz', async (req, res) => {
   const { topic, expertise, numberOfQuestions, style } = req.body; // Extract options from the request body
 
