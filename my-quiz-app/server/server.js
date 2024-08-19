@@ -1,6 +1,7 @@
 const express = require('express');
 const axios = require('axios');
 require('dotenv').config({ path: '../.env' }); 
+const path = require('path');
 
 const app = express();
 app.use(express.json()); // Middleware to parse JSON request bodies
@@ -132,6 +133,15 @@ app.post('/api/verify-answer', async (req, res) => {
     res.status(500).send('Failed to verify answer');
   }
 });
+
+// Serve static files from the React app (after the build step)
+app.use(express.static(path.join(__dirname, 'build')));
+
+// Handle React routing, return all requests to the front-end app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+});
+
 
 // Start the server
 app.listen(port, () => {
