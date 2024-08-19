@@ -1,24 +1,28 @@
 import React, { useState } from 'react';
 
-function Generate() {
-  const [topic, setTopic] = useState('golang'); 
-  const [expertise, setExpertise] = useState('novice'); 
-  const [numberOfQuestions, setNumberOfQuestions] = useState(5);
-  const [style, setStyle] = useState('normal'); //Defaulting the quiz answer choices ^^^
-  const [quizGenerated, setQuizGenerated] = useState(false); //Tracks wether quiz generated
-  const [questions, setQuestions] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);//Tracks index of first question
-  const [userAnswer, setUserAnswer] = useState(''); 
-  const [feedback, setFeedback] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080';
+
+function Generate() {
+  const [topic, setTopic] = useState('golang'); // Defaulting quiz answer choices
+  const [expertise, setExpertise] = useState('novice'); 
+  const [numberOfQuestions, setNumberOfQuestions] = useState(5); 
+  const [style, setStyle] = useState('normal'); 
+  const [quizGenerated, setQuizGenerated] = useState(false); // Tracks whether the quiz has been generated
+  const [questions, setQuestions] = useState([]); // Holds the generated quiz questions
+  const [loading, setLoading] = useState(false); // Tracks loading state for data fetching
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); 
+  const [userAnswer, setUserAnswer] = useState(''); // Stores the user's answer
+  const [feedback, setFeedback] = useState(''); 
+  const [errorMessage, setErrorMessage] = useState(''); // Error message in case of failure
+
+  // Handles quiz generation by sending selected options to the API and fetching quiz questions
   const handleGenerateQuiz = async (e) => {
     e.preventDefault();
-    setLoading(true); //Set loading state to true when fetching data
+    setLoading(true); // Set loading state to true when fetching data
     setErrorMessage('');
 
-//Object with selected quiz options
+    // Object with selected quiz options
     const quizData = {
       topic,
       expertise,
@@ -27,8 +31,8 @@ function Generate() {
     };
 
     try {
-      //Sending POST request to backend API for quiz
-      const response = await fetch('http://localhost:8080/api/generate-quiz', {
+      // Sending POST request to backend API for quiz
+      const response = await fetch(`${API_BASE_URL}/api/generate-quiz`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -39,15 +43,15 @@ function Generate() {
       if (response.ok) {
         const data = await response.json();
         console.log('Received response from Claude API:', data);
-        //Verifies that response contains valid questions array 
+        // Verifies that response contains a valid questions array
         if (data && Array.isArray(data.questions) && data.questions.length > 0) {
-          // Map the questions to array of objects and store them in state
+          // Map the questions to an array of objects and store them in state
           const questionsArray = data.questions.map((question) => ({
             question: question,
           }));
 
-          setQuestions(questionsArray);// Set fetched questions in state
-          setQuizGenerated(true);
+          setQuestions(questionsArray); // Set fetched questions in state
+          setQuizGenerated(true); // Indicate that the quiz has been generated
           setCurrentQuestionIndex(0); // Start with the first question
         } else {
           throw new Error('Unexpected response structure');
@@ -58,43 +62,41 @@ function Generate() {
         setErrorMessage(`Failed to generate quiz: ${errorText}`);
       }
     } catch (error) {
-      //Handles any errors during the fetch or processing of response
       console.error('Error generating quiz:', error);
       setErrorMessage(`Error generating quiz: ${error.message}`);
     } finally {
-      setLoading(false);
+      setLoading(false); // Set loading state to false after completion
     }
   };
 
-
+  // Handles the submission of an answer by verifying it with the API
   const handleSubmitAnswer = async (e) => {
     e.preventDefault();
     const currentQuestion = questions[currentQuestionIndex];
-  
+
     try {
       // Send request to the server to verify the user's answer
-      const response = await fetch('http://localhost:8080/api/verify-answer', {
+      const response = await fetch(`${API_BASE_URL}/api/verify-answer`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           question: currentQuestion.question,
-          userAnswer, // Answer provided by user
-          correctAnswer: currentQuestion.correctAnswer, // Correct answer for current question
+          userAnswer, 
         }),
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         console.log('Verification result:', data);
-  
+
         // Update feedback based on verification result
         setFeedback(data.correct ? 'Correct!' : 'Incorrect.');
       } else {
         setFeedback('Failed to verify answer.');
       }
-  
+
       // Move to the next question after showing feedback
       setTimeout(() => {
         setFeedback('');
@@ -111,7 +113,7 @@ function Generate() {
       setFeedback('Error verifying answer.');
     }
   };
-  
+
   return (
     <div className="container" style={{ padding: '20px' }}>
       <h1>Generate Quiz Page</h1>
@@ -240,7 +242,7 @@ const inputStyle = {
   backgroundColor: '#fff',
 };
 
-// Button 
+// Button styling
 const buttonStyle = {
   display: 'block',
   width: '100%',
@@ -264,4 +266,3 @@ const styles = `
 document.head.insertAdjacentHTML('beforeend', `<style>${styles}</style>`);
 
 export default Generate;
-
