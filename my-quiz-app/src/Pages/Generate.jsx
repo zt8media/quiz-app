@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom'; 
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://quiz-app-0ql9.onrender.com';
 
@@ -104,8 +104,8 @@ function Generate() {
         if (currentQuestionIndex < questions.length - 1) {
           setCurrentQuestionIndex(currentQuestionIndex + 1);
         } else {
-          alert('Quiz completed!');
-          setQuizGenerated(false); // Reset quiz
+          // Redirect to the results page after the quiz is completed
+          useNavigate('/Results.jsx', { state: { questions } });
         }
       }, 3000); // Show feedback for 3 seconds
     } catch (error) {
