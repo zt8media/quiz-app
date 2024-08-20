@@ -106,7 +106,7 @@ function Generate() {
           // Show alert when the quiz is completed
           if (window.confirm('Quiz completed! Click OK to view your results.')) {
             // Navigate to the results page after clicking OK on the alert
-            navigate('./Results.jsx', { state: { questions } });
+            navigate('./results', { state: { questions } });
           }
         }
       }, 3000);
