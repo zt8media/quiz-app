@@ -97,23 +97,24 @@ function Generate() {
         setFeedback('Failed to verify answer.');
       }
 
-      // Move to the next question after showing feedback
       setTimeout(() => {
         setFeedback('');
         setUserAnswer('');
         if (currentQuestionIndex < questions.length - 1) {
           setCurrentQuestionIndex(currentQuestionIndex + 1);
         } else {
-          // Redirect to the results page after the quiz is completed
-          useNavigate('/Results.jsx', { state: { questions } });
+          // Show alert when the quiz is completed
+          if (window.confirm('Quiz completed! Click OK to view your results.')) {
+            // Navigate to the results page after clicking OK on the alert
+            navigate('/results', { state: { questions } });
+          }
         }
-      }, 3000); // Show feedback for 3 seconds
+      }, 3000);
     } catch (error) {
       console.error('Error verifying answer:', error);
       setFeedback('Error verifying answer.');
     }
   };
-
   return (
     <div className="container" style={{ padding: '20px' }}>
       <h1>Generate Quiz Page</h1>
