@@ -15,7 +15,7 @@ function Generate() {
   const [userAnswer, setUserAnswer] = useState(''); // Stores the user's answer
   const [feedback, setFeedback] = useState(''); 
   const [errorMessage, setErrorMessage] = useState(''); // Error message in case of failure
-
+  const navigate = useNavigate(); // Navigate hook 
   // Handles quiz generation by sending selected options to the API and fetching quiz questions
   const handleGenerateQuiz = async (e) => {
     e.preventDefault();
@@ -106,7 +106,7 @@ function Generate() {
           // Show alert when the quiz is completed
           if (window.confirm('Quiz completed! Click OK to view your results.')) {
             // Navigate to the results page after clicking OK on the alert
-            navigate('/Results.jsx', { state: { questions } });
+            navigate('./Results.jsx', { state: { questions } });
           }
         }
       }, 3000);
