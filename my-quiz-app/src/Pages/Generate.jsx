@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://quiz-app-0ql9.onrender.com';
 
-const history = useHistory();
+
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080';
 
 function Generate() {
   const [topic, setTopic] = useState('golang'); // Defaulting quiz answer choices
@@ -97,44 +96,23 @@ function Generate() {
       } else {
         setFeedback('Failed to verify answer.');
       }
-    
+
       // Move to the next question after showing feedback
-  //     setTimeout(() => {
-  //       setFeedback('');
-  //       setUserAnswer('');
-  //       if (currentQuestionIndex < questions.length - 1) {
-  //         setCurrentQuestionIndex(currentQuestionIndex + 1);
-  //       } else {
-  //         alert('Quiz completed!');
-  //         setQuizGenerated(false); // Reset quiz
-  //       }
-  //     }, 3000); // Show feedback for 3 seconds
-  //   } catch (error) {
-  //     console.error('Error verifying answer:', error);
-  //     setFeedback('Error verifying answer.');
-  //   }
-  // };
-
-  setTimeout(() => {
-    setFeedback('');
-    setUserAnswer('');
-    if (currentQuestionIndex < questions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    } else {
-      alert('Quiz completed!');
-      history.push("/Results"); // Correct way to navigate programmatically
-      setQuizGenerated(false); // Reset quiz
+      setTimeout(() => {
+        setFeedback('');
+        setUserAnswer('');
+        if (currentQuestionIndex < questions.length - 1) {
+          setCurrentQuestionIndex(currentQuestionIndex + 1);
+        } else {
+          alert('Quiz completed!');
+          setQuizGenerated(false); // Reset quiz
+        }
+      }, 3000); // Show feedback for 3 seconds
+    } catch (error) {
+      console.error('Error verifying answer:', error);
+      setFeedback('Error verifying answer.');
     }
-  }, 3000); // Show feedback for 3 seconds
-  
-  } catch (error) {
-    console.error('Error verifying answer:', error);
-    setFeedback('Error verifying answer.');
-  }
-  }
-
-
-
+  };
 
   return (
     <div className="container" style={{ padding: '20px' }}>
@@ -288,3 +266,24 @@ const styles = `
 document.head.insertAdjacentHTML('beforeend', `<style>${styles}</style>`);
 
 export default Generate;
+
+// setTimeout(() => {
+//   setFeedback('');
+//   setUserAnswer('');
+//   if (currentQuestionIndex < questions.length - 1) {
+//     setCurrentQuestionIndex(currentQuestionIndex + 1);
+//   } else {
+//     alert('Quiz completed!');
+//     history.push("/Results"); // Correct way to navigate programmatically
+//     setQuizGenerated(false); // Reset quiz
+//   }
+// }, 3000); // Show feedback for 3 seconds
+
+// } catch (error) {
+//   console.error('Error verifying answer:', error);
+//   setFeedback('Error verifying answer.');
+// }
+// }
+
+
+
