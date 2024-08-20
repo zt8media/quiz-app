@@ -89,14 +89,14 @@ const Navbar = () => {
         <i className={`fa ${isOpen ? 'fa-times' : 'fa-bars'}`} />
       </a>
       <NavbarLinks className="navbar-links right hide-on-med-and-down">
-        <li className="nav-item"><a href="/quiz">Quiz</a></li>
-        <li className="nav-item"><a href="/results">Results</a></li>
+        {/* <li className="nav-item"><a href="/quiz">Quiz</a></li> */}
+        {/* <li className="nav-item"><a href="/results">Results</a></li> */}
         <li className="nav-item"><a href="/account">Account</a></li>
         <li className="nav-item"><a href="/generate">Generate Quiz</a></li>
       </NavbarLinks>
       <Sidenav className="sidenav" id="mobile-demo">
-        <li><a href="/quiz">Quiz</a></li>
-        <li><a href="/results">Results</a></li>
+        {/* <li><a href="/quiz">Quiz</a></li> */}
+        {/* <li><a href="/results">Results</a></li> */}
         <li><a href="/account">Account</a></li>
         <li><a href="/generate">Generate Quiz</a></li>
       </Sidenav>
