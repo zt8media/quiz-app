@@ -111,7 +111,7 @@ function Generate() {
             navigate('/results', { state: { questions } });
           }
         }
-      }, 5000); // Show feedback and explanation for 5 seconds
+      }, 7000); // Show feedback and explanation for 7 seconds to be able to read description 
     } catch (error) {
       console.error('Error verifying answer:', error);
       setFeedback('Error verifying answer.');
