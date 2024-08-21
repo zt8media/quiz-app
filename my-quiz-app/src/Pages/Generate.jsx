@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://quiz-app-0ql9.onrender.com';
 
 function Generate() {
   const [topic, setTopic] = useState('golang'); // Defaulting quiz answer choices
-  const [expertise, setExpertise] = useState('novice'); 
-  const [numberOfQuestions, setNumberOfQuestions] = useState(5); 
-  const [style, setStyle] = useState('normal'); 
+  const [expertise, setExpertise] = useState('novice');
+  const [numberOfQuestions, setNumberOfQuestions] = useState(5);
+  const [style, setStyle] = useState('normal');
   const [quizGenerated, setQuizGenerated] = useState(false); // Tracks whether the quiz has been generated
   const [questions, setQuestions] = useState([]); // Holds the generated quiz questions
   const [loading, setLoading] = useState(false); // Tracks loading state for data fetching
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); 
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState(''); // Stores the user's answer
-  const [feedback, setFeedback] = useState(''); 
+  const [feedback, setFeedback] = useState('');
+  const [explanation, setExplanation] = useState(''); // Stores the explanation for correct/incorrect answer
   const [errorMessage, setErrorMessage] = useState(''); // Error message in case of failure
-  const navigate = useNavigate(); // Navigate hook 
+  const navigate = useNavigate(); // Navigate hook
   // Handles quiz generation by sending selected options to the API and fetching quiz questions
   const handleGenerateQuiz = async (e) => {
     e.preventDefault();
@@ -49,7 +50,7 @@ function Generate() {
           const questionsArray = data.questions.map((question) => ({
             question: question,
           }));
-
+          
           setQuestions(questionsArray); // Set fetched questions in state
           setQuizGenerated(true); // Indicate that the quiz has been generated
           setCurrentQuestionIndex(0); // Start with the first question
@@ -83,22 +84,23 @@ function Generate() {
         },
         body: JSON.stringify({
           question: currentQuestion.question,
-          userAnswer, 
+          userAnswer,
         }),
       });
 
       if (response.ok) {
         const data = await response.json();
         console.log('Verification result:', data);
-
-        // Update feedback based on verification result
+        // Update feedback and explanation based on verification result
         setFeedback(data.correct ? 'Correct!' : 'Incorrect.');
+        setExplanation(data.explanation || ''); // Set the explanation from the response
       } else {
         setFeedback('Failed to verify answer.');
       }
 
       setTimeout(() => {
         setFeedback('');
+        setExplanation(''); // Clear the explanation
         setUserAnswer('');
         if (currentQuestionIndex < questions.length - 1) {
           setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -109,7 +111,7 @@ function Generate() {
             navigate('/results', { state: { questions } });
           }
         }
-      }, 3000);
+      }, 3000); // Show feedback and explanation for 3 seconds
     } catch (error) {
       console.error('Error verifying answer:', error);
       setFeedback('Error verifying answer.');
@@ -119,7 +121,7 @@ function Generate() {
     <div className="container" style={{ padding: '20px' }}>
       <h1>Generate Quiz Page</h1>
       {errorMessage && <div style={{ color: 'red', marginBottom: '10px' }}>{errorMessage}</div>}
-      
+
       {!quizGenerated ? (
         <>
           {loading ? (
@@ -213,6 +215,7 @@ function Generate() {
             <button type="submit" style={buttonStyle}>Submit Answer</button>
           </div>
           {feedback && <div style={{ marginTop: '10px', color: feedback === 'Correct!' ? 'green' : 'red' }}>{feedback}</div>}
+          {explanation && <div style={{ marginTop: '10px', color: 'gray' }}>{explanation}</div>} {/* Display explanation */}
         </form>
       )}
     </div>
@@ -225,8 +228,8 @@ const spinnerStyle = {
   margin: '40px auto',
   width: '50px',
   height: '50px',
-  border: '8px solid #f3f3f3',
-  borderTop: '8px solid #3498db',
+  border: '8px solid #F3F3F3',
+  borderTop: '8px solid #3498DB',
   borderRadius: '50%',
   animation: 'spin 1s linear infinite',
 };
