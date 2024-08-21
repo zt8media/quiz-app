@@ -13,8 +13,8 @@ function Generate() {
   const [loading, setLoading] = useState(false); // Tracks loading state for data fetching
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState(''); // Stores the user's answer
-  const [feedback, setFeedback] = useState('');
-  const [explanation, setExplanation] = useState(''); // Stores the explanation for correct/incorrect answer
+  const [feedback, setFeedback] = useState(''); // Stores feedback on the user's answer
+  const [explanation, setExplanation] = useState(''); // Stores the explanation for the answer
   const [errorMessage, setErrorMessage] = useState(''); // Error message in case of failure
   const navigate = useNavigate(); // Navigate hook
   // Handles quiz generation by sending selected options to the API and fetching quiz questions
@@ -74,7 +74,7 @@ function Generate() {
   const handleSubmitAnswer = async (e) => {
     e.preventDefault();
     const currentQuestion = questions[currentQuestionIndex];
-    
+
     try {
       // Send request to the server to verify the user's answer
       const response = await fetch(`${API_BASE_URL}/api/verify-answer`, {
@@ -93,14 +93,14 @@ function Generate() {
         console.log('Verification result:', data);
         // Update feedback and explanation based on verification result
         setFeedback(data.correct ? 'Correct!' : 'Incorrect.');
-        setExplanation(data.explanation || ''); // Set the explanation from the response
+        setExplanation(data.explanation || ''); // Store the explanation for the answer
       } else {
         setFeedback('Failed to verify answer.');
       }
 
       setTimeout(() => {
         setFeedback('');
-        setExplanation(''); // Clear the explanation
+        setExplanation('');
         setUserAnswer('');
         if (currentQuestionIndex < questions.length - 1) {
           setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -111,7 +111,7 @@ function Generate() {
             navigate('/results', { state: { questions } });
           }
         }
-      }, 3000); // Show feedback and explanation for 3 seconds
+      }, 5000); // Show feedback and explanation for 5 seconds
     } catch (error) {
       console.error('Error verifying answer:', error);
       setFeedback('Error verifying answer.');
@@ -214,8 +214,16 @@ function Generate() {
             />
             <button type="submit" style={buttonStyle}>Submit Answer</button>
           </div>
-          {feedback && <div style={{ marginTop: '10px', color: feedback === 'Correct!' ? 'green' : 'red' }}>{feedback}</div>}
-          {explanation && <div style={{ marginTop: '10px', color: 'gray' }}>{explanation}</div>} {/* Display explanation */}
+          {feedback && (
+            <div style={{ marginTop: '10px', color: feedback === 'Correct!' ? 'green' : 'red' }}>
+              {feedback}
+            </div>
+          )}
+          {explanation && (
+            <div style={{ marginTop: '5px', color: 'blue' }}>
+              Explanation: {explanation}
+            </div>
+          )}
         </form>
       )}
     </div>

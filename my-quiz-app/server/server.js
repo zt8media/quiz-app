@@ -77,12 +77,10 @@ app.post('/api/generate-quiz', async (req, res) => {
 
 app.post('/api/verify-answer', async (req, res) => {
   const { question, userAnswer, correctAnswer } = req.body;
-
-  const prompt = `The question is: "${question}". The user's answer is: "${userAnswer}". The correct answer is: "${correctAnswer}". 
-  Compare the user's answer to the correct answer. Is the user's answer correct? Reply with "Correct" or "Incorrect". 
-  As long as the user's answer is partially correct, respond with "Correct". 
-  It does not have to be the full technical description or a complete explanation. Also provide a brief explanation on why the user's answer is correct or incorrect`;
-
+  // Update the prompt to request an explanation
+  const prompt = `The question is: "${question}". The user's answer is: "${userAnswer}". The correct answer is: "${correctAnswer}".
+  Compare the user's answer to the correct answer, the user's answer does not have to be the full technical description,can be one word answers, and partially correct to be 'Correct'. 
+  Is the user's answer correct? Reply with "Correct" or "Incorrect". Also, provide a brief explanation of why the answer is correct or incorrect.`;
   try {
     console.log('Sending verification request to Claude API with prompt:', prompt);
 
@@ -90,13 +88,13 @@ app.post('/api/verify-answer', async (req, res) => {
       method: 'post',
       url: claudeBaseURL,
       headers: {
-        'x-api-key': claudeAPIKey,
+        'x-api-key': claudeAPIKey, 
         'Content-Type': 'application/json',
-        'anthropic-version': '2023-06-01',
+        'anthropic-version': '2023-06-01', 
       },
       data: {
         model: 'claude-3-5-sonnet-20240620',
-        max_tokens: 100,
+        max_tokens: 150, 
         messages: [
           { role: 'user', content: prompt },
         ],
@@ -104,11 +102,14 @@ app.post('/api/verify-answer', async (req, res) => {
     });
 
     console.log('Received response from Claude API:', response.data);
-
-    const answerVerification = response.data.content[0].text.trim().toLowerCase();
-    const isCorrect = answerVerification === 'correct';
-    const explanation = response.data.content[0].text.split('\n')[1] || 'No explanation provided.'; // Extract explanation
-    res.json({ correct: isCorrect });
+    // Extract the response text
+    const responseText = response.data.content[0].text.trim();
+    // Check if the response starts with "Correct" or "Incorrect"
+    const isCorrect = responseText.toLowerCase().startsWith('correct');
+    // Extract the explanation (everything after the first line)
+    const explanation = responseText.split('\n').slice(1).join(' ') || 'No explanation provided.';
+    // Send both the correctness and the explanation back to the user
+    res.json({ correct: isCorrect, explanation });
   } catch (error) {
     console.error('Error verifying answer:', error);
     res.status(500).send('Failed to verify answer');
