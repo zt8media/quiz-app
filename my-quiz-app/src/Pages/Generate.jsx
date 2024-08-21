@@ -50,7 +50,7 @@ function Generate() {
           const questionsArray = data.questions.map((question) => ({
             question: question,
           }));
-          
+
           setQuestions(questionsArray); // Set fetched questions in state
           setQuizGenerated(true); // Indicate that the quiz has been generated
           setCurrentQuestionIndex(0); // Start with the first question
@@ -74,7 +74,7 @@ function Generate() {
   const handleSubmitAnswer = async (e) => {
     e.preventDefault();
     const currentQuestion = questions[currentQuestionIndex];
-
+    
     try {
       // Send request to the server to verify the user's answer
       const response = await fetch(`${API_BASE_URL}/api/verify-answer`, {

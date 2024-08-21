@@ -81,7 +81,7 @@ app.post('/api/verify-answer', async (req, res) => {
   const prompt = `The question is: "${question}". The user's answer is: "${userAnswer}". The correct answer is: "${correctAnswer}". 
   Compare the user's answer to the correct answer. Is the user's answer correct? Reply with "Correct" or "Incorrect". 
   As long as the user's answer is partially correct, respond with "Correct". 
-  It does not have to be the full technical description or a complete explanation. Additionally explain why the answer is correct or incorrect`;
+  It does not have to be the full technical description or a complete explanation. Also provide a brief explanation on why the user's answer is correct or incorrect`;
 
   try {
     console.log('Sending verification request to Claude API with prompt:', prompt);
@@ -107,7 +107,7 @@ app.post('/api/verify-answer', async (req, res) => {
 
     const answerVerification = response.data.content[0].text.trim().toLowerCase();
     const isCorrect = answerVerification === 'correct';
-
+    const explanation = response.data.content[0].text.split('\n')[1] || 'No explanation provided.'; // Extract explanation
     res.json({ correct: isCorrect });
   } catch (error) {
     console.error('Error verifying answer:', error);
