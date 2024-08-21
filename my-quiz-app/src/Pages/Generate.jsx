@@ -221,7 +221,7 @@ function Generate() {
           )}
           {explanation && (
             <div style={{ marginTop: '5px', color: 'blue' }}>
-              Explanation: {explanation}
+               {explanation}
             </div>
           )}
         </form>
