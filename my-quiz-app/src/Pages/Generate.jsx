@@ -105,6 +105,7 @@ function Generate() {
           setCurrentQuestionIndex(currentQuestionIndex + 1);
         } else {
           alert('Quiz completed!');
+          <Redirect to = "/Results.jsx"/>
           setQuizGenerated(false); // Reset quiz
         }
       }, 3000); // Show feedback for 3 seconds
