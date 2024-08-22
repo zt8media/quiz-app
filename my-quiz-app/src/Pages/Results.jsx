@@ -1,7 +1,6 @@
-// src/pages/Results.jsx
 import React from 'react';
-import { useLocation, Link } from 'react-router-dom';
 import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 
 const ResultsContainer = styled.div`
   display: flex;
@@ -39,22 +38,16 @@ const TryAgainButton = styled(Link)`
   text-decoration: none;
   border-radius: 5px;
   margin-top: 20px;
-
   &:hover {
-    background-color: #00796b;
+    background-color: #00796b; /* Slightly darker shade for hover effect */
   }
 `;
 
 const Results = () => {
-  const location = useLocation();
-  const { correctAnswers, totalQuestions } = location.state || { correctAnswers: 0, totalQuestions: 0 };
-
   return (
     <ResultsContainer>
       <Title>lrnr</Title>
-      <ResultsText>
-        You got <Highlight>{correctAnswers}</Highlight> out of <Highlight>{totalQuestions}</Highlight> questions right!
-      </ResultsText>
+      <ResultsText>Questions Right: <Highlight>0111</Highlight></ResultsText>
       <TryAgainButton to="/quiz">Try Another Quiz</TryAgainButton>
     </ResultsContainer>
   );
