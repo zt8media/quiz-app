@@ -36,4 +36,4 @@ This project integrates AI through the use of the Anthropic Claude AI API
 4. Start application: `npm run dev`
 
 ### The hosted application can be found at: 
- ![LRNR Quiz-app](https://quiz-app-0ql9.onrender.com/)
+https://quiz-app-0ql9.onrender.com/
